@@ -1,4 +1,26 @@
 <resources>
     <string name="app_name">Musico</string>
     <string name="now_playing">Now Playing</string>
+
+    <string name="cheap_thrills">Cheap Thrills</string>
+    <string name="come_get_it">Come Get it</string>
+    <string name="despacito">Despacito</string>
+    <string name="diamonds">Diamonds</string>
+    <string name="dream">Dream</string>
+    <string name="one_more_night">One more night</string>
+    <string name="see_you_again">See you again</string>
+    <string name="shape_of_you">Shape of you</string>
+    <string name="side_to_side">Side to side</string>
+    <string name="this_is_what_you_came_for">This is what you came for</string>
+
+    <string name="sia">Sia</string>
+    <string name="selena_gomez">Selena Gomez</string>
+    <string name="luis_fonsi">Luis Fonsi</string>
+    <string name="rihanna">Rihanna</string>
+    <string name="imagine_dragons">Imagine Dragons</string>
+    <string name="maroon_5">Maroon 5</string>
+    <string name="wiz_khalifa">Wiz Khalifa</string>
+    <string name="ed_sheeran">Ed Sheeran</string>
+    <string name="ariana_grande">Ariana Grande</string>
+    <string name="calvin_harris">Calvin Harris</string>
 </resources>

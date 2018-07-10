@@ -12,17 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/album_image"
-            android:layout_width="417dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/friends"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_margin="8dp"
+            tools:src="@drawable/friends"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -62,7 +57,8 @@
             android:id="@+id/current_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@android:color/black"
             app:layout_constraintBaseline_toBaselineOf="@+id/textView"
@@ -71,6 +67,35 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="remaining" />
+
+        <TextView
+            android:id="@+id/total_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@android:color/black"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            tools:text="total" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="/"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toStartOf="@+id/total_time"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/current_time"
+            app:layout_constraintTop_toBottomOf="@+id/artist_name" />
 
         <com.marcinmoskala.arcseekbar.ArcSeekBar
             android:id="@+id/arcSeekBar"
@@ -133,6 +158,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:elevation="8dp"
             android:background="@drawable/circular_view"
             app:layout_constraintBottom_toBottomOf="@+id/mini_circular_bg"
             app:layout_constraintEnd_toEndOf="parent"
@@ -150,6 +176,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:elevation="8dp"
             android:background="@drawable/rounded_view"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/mini_circular_bg"
@@ -169,6 +196,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:elevation="8dp"
             android:background="@drawable/circle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -209,34 +237,6 @@
             app:layout_constraintStart_toStartOf="@+id/mini_circular_bg"
             app:layout_constraintTop_toTopOf="@+id/mini_circular_bg"
             app:srcCompat="@drawable/ic_skip_previous" />
-
-        <TextView
-            android:id="@+id/total_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@android:color/black"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView"
-            tools:text="total"
-            android:padding="4dp"/>
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:padding="4dp"
-            android:text="/"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@android:color/black"
-            app:layout_constraintEnd_toStartOf="@+id/total_time"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/current_time"
-            app:layout_constraintTop_toBottomOf="@+id/artist_name" />
-
 
     </android.support.constraint.ConstraintLayout>
 

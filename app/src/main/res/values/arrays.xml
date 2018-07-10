@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer-array name="imageID">
+        <item>@drawable/cheap_thrills</item>
+        <item>@drawable/come_get_it</item>
+        <item>@drawable/despacito</item>
+        <item>@drawable/diamonds</item>
+        <item>@drawable/dream</item>
+        <item>@drawable/one_more_night</item>
+        <item>@drawable/see_you_again</item>
+        <item>@drawable/shape_of_you</item>
+        <item>@drawable/side_to_side</item>
+        <item>@drawable/this_is_what_you_came_for</item>
+    </integer-array>
+
+    <string-array name="album_artistName">
+        <item>@string/sia</item>
+        <item>@string/selena_gomez</item>
+        <item>@string/luis_fonsi</item>
+        <item>@string/rihanna</item>
+        <item>@string/imagine_dragons</item>
+        <item>@string/maroon_5</item>
+        <item>@string/wiz_khalifa</item>
+        <item>@string/ed_sheeran</item>
+        <item>@string/ariana_grande</item>
+        <item>@string/calvin_harris</item>
+    </string-array>
+
+    <string-array name="songName">
+        <item>@string/cheap_thrills</item>
+        <item>@string/come_get_it</item>
+        <item>@string/despacito</item>
+        <item>@string/diamonds</item>
+        <item>@string/dream</item>
+        <item>@string/one_more_night</item>
+        <item>@string/see_you_again</item>
+        <item>@string/shape_of_you</item>
+        <item>@string/side_to_side</item>
+        <item>@string/this_is_what_you_came_for</item>
+    </string-array>
+</resources>

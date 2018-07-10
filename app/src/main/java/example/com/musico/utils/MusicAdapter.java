@@ -41,7 +41,9 @@ public class MusicAdapter extends ArrayAdapter<MusicItem> {
         final MusicItem musicItem = getItem(position);
         ImageView songImageView = convertView.findViewById(R.id.imageView);
         TextView titleTextView = convertView.findViewById(R.id.songName);
+        titleTextView.setSingleLine(true);
         TextView subtitleTextView = convertView.findViewById(R.id.artistName);
+        subtitleTextView.setSingleLine(true);
 
         if (musicItem != null) {
             titleTextView.setText(musicItem.getSongName());

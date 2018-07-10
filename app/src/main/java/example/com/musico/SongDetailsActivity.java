@@ -1,8 +1,12 @@
 package example.com.musico;
 
 import android.content.Intent;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.media.audiofx.Equalizer;
+import android.net.Uri;
 import android.os.Handler;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,7 +32,7 @@ import static example.com.musico.utils.MusicAdapter.ITEM_POSITION;
 
 public class SongDetailsActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = SongDetailsActivity.class.getSimpleName();
+    public static final String LOG_TAG = SongDetailsActivity.class.getSimpleName();
     @BindView(R.id.song_name)
     TextView title;
     @BindView(R.id.artist_name)
@@ -66,19 +70,18 @@ public class SongDetailsActivity extends AppCompatActivity {
     private Runnable updateTimeTask = new Runnable() {
         @Override
         public void run() {
-            int totalDuration = mediaPlayer.getDuration();
-//            Log.d(LOG_TAG, "Total Duration : " + totalDuration);
-            int currentDuration = mediaPlayer.getCurrentPosition();
-//            Log.d(LOG_TAG, "Current Position : " + currentDuration);
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                int totalDuration = mediaPlayer.getDuration();
+                int currentDuration = mediaPlayer.getCurrentPosition();
 
-            totalTimeTextView.setText("" + utils.millisecondsToTimer(totalDuration));
-            currentTimeTextView.setText("" + utils.millisecondsToTimer(currentDuration));
+                int progress = utils.getProgressPercentage(currentDuration, totalDuration);
+                seekBar.setProgress(progress);
 
-            int progress = utils.getProgressPercentage(currentDuration, totalDuration);
-//            Log.d(LOG_TAG, "Progress : " + progress);
-            seekBar.setProgress(progress);
+                totalTimeTextView.setText("" + utils.millisecondsToTimer(totalDuration));
+                currentTimeTextView.setText("" + utils.millisecondsToTimer(currentDuration));
 
-            handler.postDelayed(this, 100);
+                handler.postDelayed(this, 100);
+            }
         }
     };
 
@@ -87,23 +90,32 @@ public class SongDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_details);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         ButterKnife.bind(this);
         utils = new Utilities();
-        musicItems = MusicData.getMusicItemsList();
+        musicItems = MusicData.getMusicItemsList(this);
 
         Intent intent = getIntent();
-//        musicItem = (MusicItem) intent.getSerializableExtra(MUSIC_OBJECT);
         currentSongIndex = intent.getIntExtra(ITEM_POSITION, 0);
         musicItem = musicItems.get(currentSongIndex);
         title.setText(musicItem.getSongName());
         subTitle.setText(musicItem.getArtistName());
         albumImg.setImageResource(musicItem.getImageId());
-        currentTimeTextView.setText("Time Remaining");
+        currentTimeTextView.setText("0:00");
+        Uri mediaPath = Uri.parse("android.resource://" + getPackageName() + "/" + musicItem.getSongId());
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(this, mediaPath);
+        String duration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        duration = utils.millisecondsToTimer(Integer.parseInt(duration));
+        totalTimeTextView.setText(duration);
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mediaPlayer != null && mediaPlayer.isPlaying()) {
+                if (mediaPlayer != null && mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
                     play.setImageResource(R.drawable.ic_play_arrow);
                 } else {
@@ -142,7 +154,7 @@ public class SongDetailsActivity extends AppCompatActivity {
         skipPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSongIndex - 1 >= 0) {
+                if (currentSongIndex - 1 >= 0) {
                     currentSongIndex--;
                 } else {
                     cancelToast();
@@ -186,16 +198,22 @@ public class SongDetailsActivity extends AppCompatActivity {
     }
 
     private void playNext() {
-        if(currentSongIndex + 1 < musicItems.size()) {
+        if (currentSongIndex + 1 < musicItems.size()) {
             currentSongIndex++;
         } else {
             currentSongIndex = 0;
-            cancelToast();
-            toast = Toast.makeText(SongDetailsActivity.this, "Playing from the top", Toast.LENGTH_SHORT);
-            toast.show();
         }
+        cancelToast();
+        toast = Toast.makeText(SongDetailsActivity.this, "Playing song : " + currentSongIndex, Toast.LENGTH_SHORT);
+        toast.show();
         musicItem = musicItems.get(currentSongIndex);
         playSong(currentSongIndex);
+    }
+
+    private void updateUI() {
+        albumImg.setImageResource(musicItem.getImageId());
+        title.setText(musicItem.getSongName());
+        subTitle.setText(musicItem.getArtistName());
     }
 
     private void cancelToast() {
@@ -206,15 +224,11 @@ public class SongDetailsActivity extends AppCompatActivity {
 
     private void playSong(final int position) {
 
-        if(mediaPlayer.getCurrentPosition() > 0) {
-        } else {
-            musicItem = musicItems.get(position);
-            mediaPlayer.reset();
+        musicItem = musicItems.get(position);
+        updateUI();
+        mediaPlayer.reset();
 
-            mediaPlayer = MediaPlayer.create(this, musicItem.getSongId());
-        }
-
-
+        mediaPlayer = MediaPlayer.create(this, musicItem.getSongId());
 
         mediaPlayer.start();
         play.setImageResource(R.drawable.ic_pause);
@@ -226,10 +240,6 @@ public class SongDetailsActivity extends AppCompatActivity {
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
-                /*handler.removeCallbacks(updateTimeTask);
-                seekBar.setProgress(0);
-                play.setImageResource(R.drawable.ic_play_arrow);
-                releaseMediaPlayer();*/
 
                 if (isRepeat) {
                     Log.i(LOG_TAG, "Repeat is on!");
@@ -252,15 +262,24 @@ public class SongDetailsActivity extends AppCompatActivity {
     }
 
     private void releaseMediaPlayer() {
-        if(mediaPlayer != null) {
+        Log.i(LOG_TAG, "Releasing MediaPlayer");
+        if (mediaPlayer != null) {
             mediaPlayer.release();
         }
     }
 
     @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
-        if(mediaPlayer != null && mediaPlayer.isPlaying()) {
+        handler.removeCallbacks(updateTimeTask);
+        Log.i(LOG_TAG, "Inside onPause");
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             play.setImageResource(R.drawable.ic_play_arrow);
         }
@@ -269,11 +288,11 @@ public class SongDetailsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-            mediaPlayer = MediaPlayer.create(this, musicItem.getSongId());
-            Log.i(LOG_TAG, "Audio duration is : " + mediaPlayer.getDuration() / 1000);
-            seekBar.setMaxProgress(100);
-            seekBar.setProgress(0);
-            updateSeekBar();
+        mediaPlayer = MediaPlayer.create(this, musicItem.getSongId());
+        Log.i(LOG_TAG, "Inside onResume");
+        seekBar.setMaxProgress(100);
+        seekBar.setProgress(0);
+        updateSeekBar();
     }
 
     @Override

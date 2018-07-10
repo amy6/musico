@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         GridView gridView = findViewById(R.id.gridView);
-        ArrayList<MusicItem> musicItems = MusicData.getMusicItemsList();
+        ArrayList<MusicItem> musicItems = MusicData.getMusicItemsList(this);
 
         MusicAdapter musicAdapter = new MusicAdapter(this, musicItems);
         gridView.setAdapter(musicAdapter);
