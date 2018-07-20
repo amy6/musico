@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item android:id="@+id/songs"
+            android:icon="@drawable/ic_library_music"
+            android:title="Songs"/>
+
+        <item android:id="@+id/albums"
+            android:icon="@drawable/ic_album"
+            android:title="Albums"/>
+
+        <item android:id="@+id/artists"
+            android:icon="@drawable/ic_record_voice_over"
+            android:title="Artists"/>
+
+    </group>
+
+</menu>

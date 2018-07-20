@@ -11,16 +11,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
         </activity>
         <activity android:name=".SongDetailsActivity"
             android:label="@string/now_playing"
-            android:configChanges="keyboardHidden|orientation"></activity>
+            android:theme="@style/CustomTheme"
+            android:configChanges="keyboardHidden|orientation">
+        </activity>
+        <provider
+            android:authorities="android.content.SearchRecentSuggestionsProvider"
+            android:name=".utils.SuggestionsProvider"/>
     </application>
 
 </manifest>

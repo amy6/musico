@@ -2,66 +2,96 @@ package example.com.musico.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.marcinmoskala.arcseekbar.ArcSeekBar;
+import java.util.ArrayList;
 
-import java.util.List;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import example.com.musico.R;
 import example.com.musico.SongDetailsActivity;
 import example.com.musico.data.MusicItem;
 
-public class MusicAdapter extends ArrayAdapter<MusicItem> {
+import static example.com.musico.MainActivity.ALBUMS_TAG;
+import static example.com.musico.MainActivity.ITEM_POSITION;
 
+public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicItemHolder> {
 
-    public static final String MUSIC_OBJECT = "MUSIC_ITEM";
-    public static final String ITEM_POSITION = "POSITION";
+    private Context context;
+    private ArrayList<MusicItem> musicItems;
+    private String fragmentTag;
+    private String artistName;
 
-    public MusicAdapter(@NonNull Context context, @NonNull List<MusicItem> musicItems) {
-        super(context, 0, musicItems);
+    public MusicAdapter(Context context, ArrayList<MusicItem> musicItems, String tag, String artistName) {
+        this.context = context;
+        this.musicItems = musicItems;
+        this.fragmentTag = tag;
+        this.artistName = artistName;
     }
 
     @NonNull
     @Override
-    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
-        if(convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.layout_music_item, parent, false);
+    public MusicItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        switch (fragmentTag) {
+            case ALBUMS_TAG:
+                return new MusicItemHolder(LayoutInflater.from(context)
+                        .inflate(R.layout.layout_album_item, parent, false));
+                default:
+                    return new MusicItemHolder(LayoutInflater.from(context)
+                            .inflate(R.layout.layout_song_item, parent, false));
         }
-
-        final MusicItem musicItem = getItem(position);
-        ImageView songImageView = convertView.findViewById(R.id.imageView);
-        TextView titleTextView = convertView.findViewById(R.id.songName);
-        titleTextView.setSingleLine(true);
-        TextView subtitleTextView = convertView.findViewById(R.id.artistName);
-        subtitleTextView.setSingleLine(true);
-
-        if (musicItem != null) {
-            titleTextView.setText(musicItem.getSongName());
-            subtitleTextView.setText(musicItem.getArtistName());
-            songImageView.setImageResource(musicItem.getImageId());
-        }
-
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), SongDetailsActivity.class);
-                intent.putExtra(ITEM_POSITION, position);
-//                intent.putExtra(MUSIC_OBJECT, musicItem);
-                getContext().startActivity(intent);
-            }
-        });
-
-        return convertView;
     }
 
+    @Override
+    public void onBindViewHolder(@NonNull final MusicItemHolder holder, int position) {
+        MusicItem musicItem = musicItems.get(position);
+        holder.songImageView.setImageResource(musicItem.getImageId());
+
+        holder.titleTextView.setSingleLine(true);
+        holder.titleTextView.setText(musicItem.getSongName());
+
+        holder.subtitleTextView.setSingleLine(true);
+        holder.subtitleTextView.setText(musicItem.getArtistName());
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, SongDetailsActivity.class);
+                intent.putExtra(ITEM_POSITION, holder.getAdapterPosition());
+                if (artistName != null && artistName.length() > 0) {
+                    intent.putExtra("ARTIST_NAME", artistName);
+                }
+                context.startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return musicItems.size();
+    }
+
+    static class MusicItemHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.cardView)
+        CardView cardView;
+        @BindView(R.id.imageView)
+        ImageView songImageView;
+        @BindView(R.id.songName)
+        TextView titleTextView;
+        @BindView(R.id.artistName)
+        TextView subtitleTextView;
+
+        MusicItemHolder(@NonNull View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
 }

@@ -112,8 +112,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/current_time"
             app:layout_constraintVertical_bias="0.0"
+            app:progress="45"
             app:progressBackgroundColor="@color/yellow"
-            app:progressColor="@color/tangerine" />
+            app:progressColor="@color/tangerine"
+            app:progressBackgroundWidth="2dp"/>
 
         <View
             android:id="@+id/circular_bg"

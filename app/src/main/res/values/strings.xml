@@ -3,7 +3,7 @@
     <string name="now_playing">Now Playing</string>
 
     <string name="cheap_thrills">Cheap Thrills</string>
-    <string name="come_get_it">Come Get it</string>
+    <string name="come_get_it">Come and Get it</string>
     <string name="despacito">Despacito</string>
     <string name="diamonds">Diamonds</string>
     <string name="dream">Dream</string>
@@ -12,6 +12,10 @@
     <string name="shape_of_you">Shape of you</string>
     <string name="side_to_side">Side to side</string>
     <string name="this_is_what_you_came_for">This is what you came for</string>
+    <string name="all_of_the_stars">All of the stars</string>
+    <string name="heart_wants_what_it_wants">Heart wants what it wants</string>
+    <string name="perfect">Perfect</string>
+    <string name="give_me_love">Give me love</string>
 
     <string name="sia">Sia</string>
     <string name="selena_gomez">Selena Gomez</string>
@@ -22,5 +26,10 @@
     <string name="wiz_khalifa">Wiz Khalifa</string>
     <string name="ed_sheeran">Ed Sheeran</string>
     <string name="ariana_grande">Ariana Grande</string>
-    <string name="calvin_harris">Calvin Harris</string>
+
+    <string name="search_hint">Search songs and artists</string>
+    <string name="clear_search_history">Clear search history</string>
+    
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>

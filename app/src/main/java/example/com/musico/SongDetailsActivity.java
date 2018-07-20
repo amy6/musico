@@ -3,12 +3,12 @@ package example.com.musico;
 import android.content.Intent;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.media.audiofx.Equalizer;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -28,7 +28,7 @@ import example.com.musico.data.MusicData;
 import example.com.musico.data.MusicItem;
 import example.com.musico.utils.Utilities;
 
-import static example.com.musico.utils.MusicAdapter.ITEM_POSITION;
+import static example.com.musico.MainActivity.ITEM_POSITION;
 
 public class SongDetailsActivity extends AppCompatActivity {
 
@@ -96,10 +96,15 @@ public class SongDetailsActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         utils = new Utilities();
-        musicItems = MusicData.getMusicItemsList(this);
 
         Intent intent = getIntent();
         currentSongIndex = intent.getIntExtra(ITEM_POSITION, 0);
+        String artistName = intent.getStringExtra("ARTIST_NAME");
+        if (artistName != null && artistName.length() > 0) {
+            musicItems = MusicData.getSongByArtist(this, artistName);
+        } else {
+            musicItems = MusicData.getMusicItemsList(this);
+        }
         musicItem = musicItems.get(currentSongIndex);
         title.setText(musicItem.getSongName());
         subTitle.setText(musicItem.getArtistName());
