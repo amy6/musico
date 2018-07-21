@@ -2,7 +2,7 @@ package example.com.musico.utils;
 
 public class Utilities {
 
-    public String millisecondsToTimer (long milliSeconds) {
+    public static String millisecondsToTimer (long milliSeconds) {
         String finalTimerString = "";
         String secondsString = "";
 
@@ -20,7 +20,7 @@ public class Utilities {
         return finalTimerString;
     }
 
-    public int getProgressPercentage (long currentDuration, long totalDuration) {
+    public static int getProgressPercentage (long currentDuration, long totalDuration) {
         Double percentage;
 
         long currentSeconds = (int) (currentDuration / 1000);
@@ -31,7 +31,7 @@ public class Utilities {
         return percentage.intValue();
     }
 
-    public int progressToTimer (int progress, int totalDuration) {
+    public static int progressToTimer (int progress, int totalDuration) {
         int currentDuration;
         totalDuration = totalDuration / 1000;
         currentDuration = (int) ((((double)progress) / 100) * totalDuration);

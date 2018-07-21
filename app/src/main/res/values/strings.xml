@@ -28,8 +28,9 @@
     <string name="ariana_grande">Ariana Grande</string>
 
     <string name="search_hint">Search songs and artists</string>
-    <string name="clear_search_history">Clear search history</string>
-    
+
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="exit_confirm">Press back again to exit</string>
+    <string name="initial_time">0:00</string>
 </resources>

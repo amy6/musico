@@ -1,4 +1,4 @@
-package example.com.musico;
+package example.com.musico.activity;
 
 import android.content.Intent;
 import android.media.MediaMetadataRetriever;
@@ -6,10 +6,9 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.ActionBar;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,15 +23,18 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import example.com.musico.data.MusicData;
+import example.com.musico.R;
+import example.com.musico.utils.MusicData;
 import example.com.musico.data.MusicItem;
-import example.com.musico.utils.Utilities;
 
-import static example.com.musico.MainActivity.ITEM_POSITION;
+import static example.com.musico.activity.MainActivity.ARTIST_NAME;
+import static example.com.musico.activity.MainActivity.ITEM_POSITION;
+import static example.com.musico.utils.Utilities.getProgressPercentage;
+import static example.com.musico.utils.Utilities.millisecondsToTimer;
+import static example.com.musico.utils.Utilities.progressToTimer;
 
 public class SongDetailsActivity extends AppCompatActivity {
 
-    public static final String LOG_TAG = SongDetailsActivity.class.getSimpleName();
     @BindView(R.id.song_name)
     TextView title;
     @BindView(R.id.artist_name)
@@ -60,7 +62,6 @@ public class SongDetailsActivity extends AppCompatActivity {
     private int currentSongIndex;
     private MediaPlayer mediaPlayer;
     private Handler handler = new Handler();
-    private Utilities utils;
     private Toast toast;
     private boolean isRepeat;
     private boolean isShuffle;
@@ -74,11 +75,11 @@ public class SongDetailsActivity extends AppCompatActivity {
                 int totalDuration = mediaPlayer.getDuration();
                 int currentDuration = mediaPlayer.getCurrentPosition();
 
-                int progress = utils.getProgressPercentage(currentDuration, totalDuration);
+                int progress = getProgressPercentage(currentDuration, totalDuration);
                 seekBar.setProgress(progress);
 
-                totalTimeTextView.setText("" + utils.millisecondsToTimer(totalDuration));
-                currentTimeTextView.setText("" + utils.millisecondsToTimer(currentDuration));
+                totalTimeTextView.setText(String.valueOf(millisecondsToTimer(totalDuration)));
+                currentTimeTextView.setText(String.valueOf(millisecondsToTimer(currentDuration)));
 
                 handler.postDelayed(this, 100);
             }
@@ -95,26 +96,25 @@ public class SongDetailsActivity extends AppCompatActivity {
         }
 
         ButterKnife.bind(this);
-        utils = new Utilities();
 
         Intent intent = getIntent();
         currentSongIndex = intent.getIntExtra(ITEM_POSITION, 0);
-        String artistName = intent.getStringExtra("ARTIST_NAME");
+        String artistName = intent.getStringExtra(ARTIST_NAME);
         if (artistName != null && artistName.length() > 0) {
             musicItems = MusicData.getSongByArtist(this, artistName);
         } else {
             musicItems = MusicData.getMusicItemsList(this);
         }
         musicItem = musicItems.get(currentSongIndex);
+        currentTimeTextView.setText(R.string.initial_time);
         title.setText(musicItem.getSongName());
         subTitle.setText(musicItem.getArtistName());
         albumImg.setImageResource(musicItem.getImageId());
-        currentTimeTextView.setText("0:00");
         Uri mediaPath = Uri.parse("android.resource://" + getPackageName() + "/" + musicItem.getSongId());
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(this, mediaPath);
         String duration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        duration = utils.millisecondsToTimer(Integer.parseInt(duration));
+        duration = millisecondsToTimer(Integer.parseInt(duration));
         totalTimeTextView.setText(duration);
 
         play.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +141,7 @@ public class SongDetailsActivity extends AppCompatActivity {
             public void invoke(int i) {
                 handler.removeCallbacks(updateTimeTask);
                 int totalDuration = mediaPlayer.getDuration();
-                int currentPosition = utils.progressToTimer(seekBar.getProgress(), totalDuration);
+                int currentPosition = progressToTimer(seekBar.getProgress(), totalDuration);
 
                 mediaPlayer.seekTo(currentPosition);
 
@@ -175,12 +175,12 @@ public class SongDetailsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (isRepeat) {
                     isRepeat = false;
-                    repeat.setImageResource(R.drawable.ic_repeat);
+                    updateVectorTint(repeat, android.R.color.white);
                 } else {
                     isRepeat = true;
                     isShuffle = false;
-                    repeat.setImageResource(R.drawable.ic_repeat_black);
-                    shuffle.setImageResource(R.drawable.ic_shuffle);
+                    updateVectorTint(repeat, R.color.red);
+                    updateVectorTint(shuffle, android.R.color.white);
                 }
             }
         });
@@ -190,16 +190,20 @@ public class SongDetailsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (isShuffle) {
                     isShuffle = false;
-                    shuffle.setImageResource(R.drawable.ic_shuffle);
+                    updateVectorTint(shuffle, android.R.color.white);
                 } else {
                     isShuffle = true;
                     isRepeat = false;
-                    shuffle.setImageResource(R.drawable.ic_shuffle_black);
-                    repeat.setImageResource(R.drawable.ic_repeat);
+                    updateVectorTint(shuffle, R.color.red);
+                    updateVectorTint(repeat, android.R.color.white);
                 }
             }
         });
 
+    }
+
+    private void updateVectorTint(ImageButton button, int color) {
+        DrawableCompat.setTint(button.getDrawable(), ContextCompat.getColor(this, color));
     }
 
     private void playNext() {
@@ -208,9 +212,6 @@ public class SongDetailsActivity extends AppCompatActivity {
         } else {
             currentSongIndex = 0;
         }
-        cancelToast();
-        toast = Toast.makeText(SongDetailsActivity.this, "Playing song : " + currentSongIndex, Toast.LENGTH_SHORT);
-        toast.show();
         musicItem = musicItems.get(currentSongIndex);
         playSong(currentSongIndex);
     }
@@ -238,8 +239,6 @@ public class SongDetailsActivity extends AppCompatActivity {
         mediaPlayer.start();
         play.setImageResource(R.drawable.ic_pause);
 
-        Log.i(LOG_TAG, "Playing song at Position : " + position);
-
         updateSeekBar();
 
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -247,11 +246,9 @@ public class SongDetailsActivity extends AppCompatActivity {
             public void onCompletion(MediaPlayer mediaPlayer) {
 
                 if (isRepeat) {
-                    Log.i(LOG_TAG, "Repeat is on!");
                     playSong(position);
                 } else {
                     if (isShuffle) {
-                        Log.i(LOG_TAG, "Shuffle is on!");
                         currentSongIndex = new Random().nextInt((musicItems.size() - 1) + 1);
                         playSong(currentSongIndex);
                     } else {
@@ -267,7 +264,6 @@ public class SongDetailsActivity extends AppCompatActivity {
     }
 
     private void releaseMediaPlayer() {
-        Log.i(LOG_TAG, "Releasing MediaPlayer");
         if (mediaPlayer != null) {
             mediaPlayer.release();
         }
@@ -283,7 +279,6 @@ public class SongDetailsActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         handler.removeCallbacks(updateTimeTask);
-        Log.i(LOG_TAG, "Inside onPause");
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             play.setImageResource(R.drawable.ic_play_arrow);
@@ -294,7 +289,6 @@ public class SongDetailsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mediaPlayer = MediaPlayer.create(this, musicItem.getSongId());
-        Log.i(LOG_TAG, "Inside onResume");
         seekBar.setMaxProgress(100);
         seekBar.setProgress(0);
         updateSeekBar();

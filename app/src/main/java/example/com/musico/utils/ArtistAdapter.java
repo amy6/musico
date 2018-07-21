@@ -1,11 +1,9 @@
 package example.com.musico.utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +14,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import example.com.musico.ArtistsFragment.OnItemSelectedListener;
-import example.com.musico.MainActivity;
+import example.com.musico.fragment.ArtistsFragment.OnItemSelectedListener;
 import example.com.musico.R;
 import example.com.musico.data.MusicItem;
 

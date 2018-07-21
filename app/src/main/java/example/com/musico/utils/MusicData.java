@@ -1,4 +1,4 @@
-package example.com.musico.data;
+package example.com.musico.utils;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -6,8 +6,8 @@ import android.content.res.TypedArray;
 
 import java.util.ArrayList;
 
-import example.com.musico.MainActivity;
 import example.com.musico.R;
+import example.com.musico.data.MusicItem;
 
 public class MusicData {
 
@@ -21,14 +21,14 @@ public class MusicData {
         TypedArray imageArray = resources.obtainTypedArray(R.array.album_imageID);
         int[] albumImageList = new int[imageArray.length()];
 
-        for(int index = 0; index < albumImageList.length; index++) {
+        for (int index = 0; index < albumImageList.length; index++) {
             albumImageList[index] = imageArray.getResourceId(index, 0);
         }
 
         imageArray.recycle();
 
         ArrayList<MusicItem> musicItems = new ArrayList<>();
-        for(int i=0; i<songResourceList.length; i++) {
+        for (int i = 0; i < songResourceList.length; i++) {
             MusicItem musicItem = new MusicItem(albumImageList[i], songNameList[i], album_artistList[i], songResourceList[i]);
             musicItems.add(musicItem);
         }
@@ -42,14 +42,14 @@ public class MusicData {
         TypedArray imageArray = resources.obtainTypedArray(R.array.artist_imageID);
         int[] artistImageList = new int[imageArray.length()];
 
-        for(int index = 0; index < artistImageList.length; index++) {
+        for (int index = 0; index < artistImageList.length; index++) {
             artistImageList[index] = imageArray.getResourceId(index, 0);
         }
 
         imageArray.recycle();
 
         ArrayList<MusicItem> musicItems = new ArrayList<>();
-        for(int i=0; i<artistImageList.length; i++) {
+        for (int i = 0; i < artistImageList.length; i++) {
             MusicItem musicItem = new MusicItem(artistImageList[i], artistList[i]);
             musicItems.add(musicItem);
         }

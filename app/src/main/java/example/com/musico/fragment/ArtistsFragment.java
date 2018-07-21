@@ -1,27 +1,28 @@
-package example.com.musico;
+package example.com.musico.fragment;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import example.com.musico.data.MusicData;
+import example.com.musico.R;
+import example.com.musico.utils.MusicData;
 import example.com.musico.data.MusicItem;
 import example.com.musico.utils.ArtistAdapter;
-import example.com.musico.utils.MusicAdapter;
 
 public class ArtistsFragment extends Fragment {
 
     private OnItemSelectedListener listener;
+    private RecyclerView recyclerView;
 
     public ArtistsFragment() {
     }
@@ -45,7 +46,7 @@ public class ArtistsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         ArrayList<MusicItem> artistItems = MusicData.getArtistImageList(getContext());
 
@@ -54,6 +55,17 @@ public class ArtistsFragment extends Fragment {
     }
 
     public interface OnItemSelectedListener {
-        public void onArtistSelected(String artistName);
+        void onArtistSelected(String artistName);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        int orientation = newConfig.orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
+        }
     }
 }

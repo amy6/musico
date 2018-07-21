@@ -6,12 +6,4 @@
     <color name="red">#F85B36</color>
     <color name="tangerine">#FD9D1D</color>
     <color name="yellow">#FFBD4B</color>
-    <color name="light_grey">#CFD1D5</color>
-    <color name="ghost_white">#FCFCFD</color>
-    <array name="progressGradientColors">
-        <item>#b5fff6</item>
-        <item>#00ffdf</item>
-        <item>#00bfa4</item>
-        <item>#007c6a</item>
-    </array>
 </resources>

@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".MainActivity"
+        <activity android:name=".activity.MainActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,14 +25,11 @@
             <meta-data android:name="android.app.searchable"
                 android:resource="@xml/searchable"/>
         </activity>
-        <activity android:name=".SongDetailsActivity"
+        <activity android:name=".activity.SongDetailsActivity"
             android:label="@string/now_playing"
             android:theme="@style/CustomTheme"
             android:configChanges="keyboardHidden|orientation">
         </activity>
-        <provider
-            android:authorities="android.content.SearchRecentSuggestionsProvider"
-            android:name=".utils.SuggestionsProvider"/>
     </application>
 
 </manifest>

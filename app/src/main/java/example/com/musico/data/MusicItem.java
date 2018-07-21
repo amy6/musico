@@ -9,14 +9,14 @@ public class MusicItem implements Serializable {
     private String artistName;
     private int songId;
 
-    MusicItem(int albumImageId, String songName, String artistName, int songId) {
+    public MusicItem(int albumImageId, String songName, String artistName, int songId) {
         this.imageId = albumImageId;
         this.songName = songName;
         this.artistName = artistName;
         this.songId = songId;
     }
 
-    MusicItem(int artistImageId, String artistName) {
+    public MusicItem(int artistImageId, String artistName) {
         this.imageId = artistImageId;
         this.artistName = artistName;
     }

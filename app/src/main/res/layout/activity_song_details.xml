@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ghost_white"
     android:fillViewport="true"
-    tools:context=".SongDetailsActivity">
+    tools:context=".activity.SongDetailsActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,10 +16,10 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_margin="8dp"
-            tools:src="@drawable/friends"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/friends" />
 
         <TextView
             android:id="@+id/song_name"
@@ -57,8 +56,8 @@
             android:id="@+id/current_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="4dp"
             android:paddingEnd="4dp"
+            android:paddingStart="4dp"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@android:color/black"
             app:layout_constraintBaseline_toBaselineOf="@+id/textView"
@@ -72,8 +71,8 @@
             android:id="@+id/total_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="4dp"
             android:paddingEnd="4dp"
+            android:paddingStart="4dp"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@android:color/black"
             app:layout_constraintBaseline_toBaselineOf="@+id/textView"
@@ -87,8 +86,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:paddingStart="4dp"
             android:paddingEnd="4dp"
+            android:paddingStart="4dp"
             android:text="/"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@android:color/black"
@@ -114,8 +113,8 @@
             app:layout_constraintVertical_bias="0.0"
             app:progress="45"
             app:progressBackgroundColor="@color/yellow"
-            app:progressColor="@color/tangerine"
-            app:progressBackgroundWidth="2dp"/>
+            app:progressBackgroundWidth="2dp"
+            app:progressColor="@color/tangerine" />
 
         <View
             android:id="@+id/circular_bg"
@@ -131,7 +130,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/current_time" />
+            app:layout_constraintTop_toTopOf="@+id/arcSeekBar" />
 
         <View
             android:id="@+id/mini_circular_bg"
@@ -160,8 +159,8 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:elevation="8dp"
             android:background="@drawable/circular_view"
+            android:elevation="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/mini_circular_bg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -178,8 +177,8 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:elevation="8dp"
             android:background="@drawable/rounded_view"
+            android:elevation="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/mini_circular_bg"
             app:layout_constraintHorizontal_bias="0.0"
@@ -198,8 +197,8 @@
             android:layout_marginRight="16dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_view"
             android:elevation="8dp"
-            android:background="@drawable/circle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"

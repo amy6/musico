@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import example.com.musico.R;
-import example.com.musico.SongDetailsActivity;
+import example.com.musico.activity.SongDetailsActivity;
 import example.com.musico.data.MusicItem;
 
-import static example.com.musico.MainActivity.ALBUMS_TAG;
-import static example.com.musico.MainActivity.ITEM_POSITION;
+import static example.com.musico.activity.MainActivity.ALBUMS_TAG;
+import static example.com.musico.activity.MainActivity.ITEM_POSITION;
 
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicItemHolder> {
 
