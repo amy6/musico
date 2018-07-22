@@ -27,6 +27,9 @@ Music Structure app developed as part of **Udacity Android Basics Nanodegree** u
 
 ![artists_landscape](https://user-images.githubusercontent.com/5392993/43044824-494ac162-8dcb-11e8-903a-9c71db2645e9.jpg)
 
+Video of the app workflow:
+https://vimeo.com/281131346
+
 **Credits:**
 * Now Playing screen UI inspiration - [Uplabs](https://www.uplabs.com/posts/google-play-music-redesign-icons)
 
