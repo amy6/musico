@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:checkableBehavior="single">
 
@@ -15,6 +16,9 @@
             android:icon="@drawable/ic_record_voice_over"
             android:title="Artists"/>
 
+        <item android:id="@+id/favorite"
+            android:icon="@drawable/ic_favorite"
+            android:title="Favorites"/>
     </group>
 
 </menu>

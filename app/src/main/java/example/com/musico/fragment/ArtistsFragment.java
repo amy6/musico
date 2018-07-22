@@ -47,7 +47,7 @@ public class ArtistsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        updateGridColumns(getContext().getResources().getConfiguration());
         ArrayList<MusicItem> artistItems = MusicData.getArtistImageList(getContext());
 
         ArtistAdapter artistAdapter = new ArtistAdapter(getContext(), artistItems, listener);
@@ -61,7 +61,11 @@ public class ArtistsFragment extends Fragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        int orientation = newConfig.orientation;
+        updateGridColumns(newConfig);
+    }
+
+    private void updateGridColumns(Configuration config) {
+        int orientation = config.orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {

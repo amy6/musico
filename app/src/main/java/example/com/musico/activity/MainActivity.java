@@ -1,5 +1,6 @@
 package example.com.musico.activity;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,11 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -68,6 +72,12 @@ public class MainActivity extends AppCompatActivity implements ArtistsFragment.O
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                if (item.getItemId() == R.id.favorite) {
+                    Intent intent = new Intent(MainActivity.this, FavoritesActivity.class);
+                    startActivity(intent);
+                }
+
                 Fragment fragment;
                 Class fragmentClass;
                 switch (item.getItemId()) {
@@ -106,6 +116,14 @@ public class MainActivity extends AppCompatActivity implements ArtistsFragment.O
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setIconifiedByDefault(false);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
 
@@ -136,9 +154,16 @@ public class MainActivity extends AppCompatActivity implements ArtistsFragment.O
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        setTitle("Songs");
+    }
+
+    @Override
     public void onBackPressed() {
-        if (doubleBackPressed) {
+        if (doubleBackPressed || fragmentManager.getBackStackEntryCount() > 0) {
             super.onBackPressed();
+            setTitle("Artists");
             return;
         }
 

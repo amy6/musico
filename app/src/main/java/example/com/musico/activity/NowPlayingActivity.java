@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,8 +25,8 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import example.com.musico.R;
-import example.com.musico.utils.MusicData;
 import example.com.musico.data.MusicItem;
+import example.com.musico.utils.MusicData;
 
 import static example.com.musico.activity.MainActivity.ARTIST_NAME;
 import static example.com.musico.activity.MainActivity.ITEM_POSITION;
@@ -33,7 +34,7 @@ import static example.com.musico.utils.Utilities.getProgressPercentage;
 import static example.com.musico.utils.Utilities.millisecondsToTimer;
 import static example.com.musico.utils.Utilities.progressToTimer;
 
-public class SongDetailsActivity extends AppCompatActivity {
+public class NowPlayingActivity extends AppCompatActivity implements View.OnClickListener {
 
     @BindView(R.id.song_name)
     TextView title;
@@ -57,7 +58,12 @@ public class SongDetailsActivity extends AppCompatActivity {
     ImageButton shuffle;
     @BindView(R.id.repeat)
     ImageButton repeat;
+    @BindView(R.id.playlist)
+    ImageButton playlist;
+    @BindView(R.id.favorite)
+    ImageButton favorite;
 
+    private ArrayList<MusicItem> musicItems;
     private MusicItem musicItem;
     private int currentSongIndex;
     private MediaPlayer mediaPlayer;
@@ -65,13 +71,13 @@ public class SongDetailsActivity extends AppCompatActivity {
     private Toast toast;
     private boolean isRepeat;
     private boolean isShuffle;
-    private ArrayList<MusicItem> musicItems;
+    private boolean isFavorite;
 
 
     private Runnable updateTimeTask = new Runnable() {
         @Override
         public void run() {
-            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            if (mediaPlayer != null) {
                 int totalDuration = mediaPlayer.getDuration();
                 int currentDuration = mediaPlayer.getCurrentPosition();
 
@@ -101,8 +107,10 @@ public class SongDetailsActivity extends AppCompatActivity {
         currentSongIndex = intent.getIntExtra(ITEM_POSITION, 0);
         String artistName = intent.getStringExtra(ARTIST_NAME);
         if (artistName != null && artistName.length() > 0) {
+            Log.d("NOW PLAYING : " , "Playing by artist : " + artistName);
             musicItems = MusicData.getSongByArtist(this, artistName);
         } else {
+            Log.d("NOW PLAYING : " , "Playing all songs ");
             musicItems = MusicData.getMusicItemsList(this);
         }
         musicItem = musicItems.get(currentSongIndex);
@@ -110,69 +118,75 @@ public class SongDetailsActivity extends AppCompatActivity {
         title.setText(musicItem.getSongName());
         subTitle.setText(musicItem.getArtistName());
         albumImg.setImageResource(musicItem.getImageId());
-        Uri mediaPath = Uri.parse("android.resource://" + getPackageName() + "/" + musicItem.getSongId());
+        final Uri mediaPath = Uri.parse("android.resource://" + getPackageName() + "/" + musicItem.getSongId());
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(this, mediaPath);
         String duration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
         duration = millisecondsToTimer(Integer.parseInt(duration));
         totalTimeTextView.setText(duration);
 
-        play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                    mediaPlayer.pause();
-                    play.setImageResource(R.drawable.ic_play_arrow);
-                } else {
-                    playSong(currentSongIndex);
-                }
-            }
-        });
+        play.setOnClickListener(this);
+        skipNext.setOnClickListener(this);
+        skipPrev.setOnClickListener(this);
+        repeat.setOnClickListener(this);
+        shuffle.setOnClickListener(this);
+        favorite.setOnClickListener(this);
+        playlist.setOnClickListener(this);
 
         seekBar.setOnStartTrackingTouch(new ProgressListener() {
             @Override
             public void invoke(int i) {
-                handler.removeCallbacks(updateTimeTask);
+                removeCallbacks();
             }
         });
 
         seekBar.setOnStopTrackingTouch(new ProgressListener() {
             @Override
             public void invoke(int i) {
-                handler.removeCallbacks(updateTimeTask);
+                removeCallbacks();
                 int totalDuration = mediaPlayer.getDuration();
                 int currentPosition = progressToTimer(seekBar.getProgress(), totalDuration);
 
                 mediaPlayer.seekTo(currentPosition);
+                Log.d("NowPlaying : " , "onStopTrackingTouch" + String.valueOf(currentPosition));
 
                 updateSeekBar();
             }
         });
 
-        skipNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                playNext();
-            }
-        });
+    }
 
-        skipPrev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.play_pause:
+                if (mediaPlayer != null ) {
+                    if (mediaPlayer.isPlaying()) {
+                        mediaPlayer.pause();
+                        play.setImageResource(R.drawable.ic_play_arrow);
+                    } else {
+                        mediaPlayer.start();
+                        play.setImageResource(R.drawable.ic_pause);
+                    }
+
+                } else {
+                    playSong(currentSongIndex);
+                }
+                break;
+            case R.id.skip_next:
+                playNext();
+                break;
+            case R.id.skip_previous:
                 if (currentSongIndex - 1 >= 0) {
                     currentSongIndex--;
                 } else {
                     cancelToast();
-                    toast = Toast.makeText(SongDetailsActivity.this, "This is the first song", Toast.LENGTH_SHORT);
+                    toast = Toast.makeText(NowPlayingActivity.this, "This is the first song", Toast.LENGTH_SHORT);
                     toast.show();
                 }
                 playSong(currentSongIndex);
-            }
-        });
-
-        repeat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.repeat:
                 if (isRepeat) {
                     isRepeat = false;
                     updateVectorTint(repeat, android.R.color.white);
@@ -182,12 +196,8 @@ public class SongDetailsActivity extends AppCompatActivity {
                     updateVectorTint(repeat, R.color.red);
                     updateVectorTint(shuffle, android.R.color.white);
                 }
-            }
-        });
-
-        shuffle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.shuffle:
                 if (isShuffle) {
                     isShuffle = false;
                     updateVectorTint(shuffle, android.R.color.white);
@@ -197,9 +207,22 @@ public class SongDetailsActivity extends AppCompatActivity {
                     updateVectorTint(shuffle, R.color.red);
                     updateVectorTint(repeat, android.R.color.white);
                 }
-            }
-        });
-
+                break;
+            case R.id.favorite:
+                if (isFavorite) {
+                    isFavorite = false;
+                    favorite.setImageResource(R.drawable.ic_favorite_border);
+                } else {
+                    isFavorite = true;
+                    favorite.setImageResource(R.drawable.ic_favorite);
+                }
+                break;
+            case R.id.playlist:
+                Intent intent = new Intent(NowPlayingActivity.this, MainActivity.class);
+                finish();
+                startActivity(intent);
+                break;
+        }
     }
 
     private void updateVectorTint(ImageButton button, int color) {
@@ -269,6 +292,10 @@ public class SongDetailsActivity extends AppCompatActivity {
         }
     }
 
+    private void removeCallbacks() {
+        handler.removeCallbacks(updateTimeTask);
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         finish();
@@ -278,7 +305,7 @@ public class SongDetailsActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        handler.removeCallbacks(updateTimeTask);
+        removeCallbacks();
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             play.setImageResource(R.drawable.ic_play_arrow);
@@ -299,4 +326,5 @@ public class SongDetailsActivity extends AppCompatActivity {
         super.onStop();
         releaseMediaPlayer();
     }
+
 }
