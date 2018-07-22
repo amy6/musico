@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import example.com.musico.R;
 import example.com.musico.utils.MusicData;
 import example.com.musico.data.MusicItem;
-import example.com.musico.utils.ArtistAdapter;
+import example.com.musico.adapter.ArtistAdapter;
 
 public class ArtistsFragment extends Fragment {
 
@@ -48,22 +48,33 @@ public class ArtistsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView);
         updateGridColumns(getContext().getResources().getConfiguration());
+        //get artists
         ArrayList<MusicItem> artistItems = MusicData.getArtistImageList(getContext());
-
         ArtistAdapter artistAdapter = new ArtistAdapter(getContext(), artistItems, listener);
         recyclerView.setAdapter(artistAdapter);
     }
 
+    /**
+     * interface to define communication between fragment and activity
+     */
     public interface OnItemSelectedListener {
         void onArtistSelected(String artistName);
     }
 
+    /**
+     * update layout depending on the current orientation
+     * @param newConfig reference to changed configuration
+     */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         updateGridColumns(newConfig);
     }
 
+    /**
+     * update recyclerview grid column numbers depending on the current orientation
+     * @param config changed configuration object reference
+     */
     private void updateGridColumns(Configuration config) {
         int orientation = config.orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {

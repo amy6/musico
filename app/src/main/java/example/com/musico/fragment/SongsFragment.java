@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import example.com.musico.R;
 import example.com.musico.utils.MusicData;
 import example.com.musico.data.MusicItem;
-import example.com.musico.utils.MusicAdapter;
+import example.com.musico.adapter.MusicAdapter;
 
 import static example.com.musico.activity.MainActivity.ARTIST;
 import static example.com.musico.activity.MainActivity.ARTIST_NAME;
@@ -34,6 +34,7 @@ public class SongsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            //get music items for a particular artist based on intent results
             musicItems = (ArrayList<MusicItem>) getArguments().getSerializable(ARTIST);
             artistName = getArguments().getString(ARTIST_NAME);
         }
@@ -53,6 +54,7 @@ public class SongsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
         if (musicItems == null || musicItems.size() == 0) {
+            //get all music items
             musicItems = MusicData.getMusicItemsList(getContext());
         }
 

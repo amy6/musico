@@ -1,4 +1,4 @@
-package example.com.musico.utils;
+package example.com.musico.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

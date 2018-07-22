@@ -27,15 +27,24 @@
     <string name="ed_sheeran">Ed Sheeran</string>
     <string name="ariana_grande">Ariana Grande</string>
 
-    <string name="search_hint">Search songs and artists</string>
-
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="exit_confirm">Press back again to exit</string>
     <string name="initial_time">0:00</string>
-    <string name="favorites">Favorites</string>
     <string name="play_next">Play Next</string>
     <string name="add_to_playlist">Add to Playlist</string>
     <string name="view_album">View Album</string>
     <string name="view_details">View Details</string>
+    <string name="first_song">This is the first song</string>
+    <string name="content_description">No description found</string>
+    <string name="divider">/</string>
+    <string name="play">Play</string>
+    <string name="no_favorites">No favorites added yet..</string>
+
+    <string name="songs">Songs</string>
+    <string name="albums">Albums</string>
+    <string name="artists">Artists</string>
+    <string name="favorites">Favorites</string>
+    <string name="explore">Explore</string>
+    <string name="search">Search</string>
 </resources>
