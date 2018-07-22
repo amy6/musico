@@ -27,7 +27,7 @@
         </activity>
         <activity
             android:name=".activity.NowPlayingActivity"
-            android:configChanges="keyboardHidden"
+            android:configChanges="keyboardHidden|orientation"
             android:label="@string/now_playing"
             android:theme="@style/CustomTheme" />
         <activity android:name=".activity.FavoritesActivity"
