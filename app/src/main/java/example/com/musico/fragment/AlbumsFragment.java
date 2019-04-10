@@ -35,11 +35,13 @@ public class AlbumsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        //get all songs
-        ArrayList<MusicItem> musicItems = MusicData.getMusicItemsList(getContext());
-        MusicAdapter musicAdapters = new MusicAdapter(getContext(), musicItems, getTag(), getTag());
-        recyclerView.setAdapter(musicAdapters);
+
+        if (getContext() != null) {
+            //get all songs
+            ArrayList<MusicItem> musicItems = MusicData.getMusicItemsList(getContext());
+            MusicAdapter musicAdapters = new MusicAdapter(getContext(), musicItems, getTag(), getTag());
+            recyclerView.setAdapter(musicAdapters);
+        }
     }
 
     /**

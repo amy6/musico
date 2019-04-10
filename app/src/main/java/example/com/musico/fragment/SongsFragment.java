@@ -50,15 +50,17 @@ public class SongsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        if (getContext() != null) {
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
-        if (musicItems == null || musicItems.size() == 0) {
-            //get all music items
-            musicItems = MusicData.getMusicItemsList(getContext());
+            if (musicItems == null || musicItems.size() == 0) {
+                //get all music items
+                musicItems = MusicData.getMusicItemsList(getContext());
+            }
+
+            MusicAdapter musicAdapters = new MusicAdapter(getContext(), musicItems, getTag(), artistName);
+            recyclerView.setAdapter(musicAdapters);
         }
-
-        MusicAdapter musicAdapters = new MusicAdapter(getContext(), musicItems, getTag(), artistName);
-        recyclerView.setAdapter(musicAdapters);
     }
 }

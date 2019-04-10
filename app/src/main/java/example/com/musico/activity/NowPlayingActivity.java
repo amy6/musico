@@ -1,9 +1,7 @@
 package example.com.musico.activity;
 
 import android.content.Intent;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -16,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.marcinmoskala.arcseekbar.ArcSeekBar;
-import com.marcinmoskala.arcseekbar.ProgressListener;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -137,26 +134,18 @@ public class NowPlayingActivity extends AppCompatActivity implements View.OnClic
         playlist.setOnClickListener(this);
 
         //set seek touch event listeners
-        seekBar.setOnStartTrackingTouch(new ProgressListener() {
-            @Override
-            public void invoke(int i) {
-                removeCallbacks();
-            }
-        });
+        seekBar.setOnStartTrackingTouch(i -> removeCallbacks());
 
-        seekBar.setOnStopTrackingTouch(new ProgressListener() {
-            @Override
-            public void invoke(int i) {
-                removeCallbacks();
-                //get progress on stop seek
-                int totalDuration = mediaPlayer.getDuration();
-                int currentPosition = progressToTimer(seekBar.getProgress(), totalDuration);
+        seekBar.setOnStopTrackingTouch(i -> {
+            removeCallbacks();
+            //get progress on stop seek
+            int totalDuration = mediaPlayer.getDuration();
+            int currentPosition = progressToTimer(seekBar.getProgress(), totalDuration);
 
-                //update mediaplayer progress accordingly
-                mediaPlayer.seekTo(currentPosition);
-                //update seekbar progress
-                updateSeekBar();
-            }
+            //update mediaplayer progress accordingly
+            mediaPlayer.seekTo(currentPosition);
+            //update seekbar progress
+            updateSeekBar();
         });
 
     }
@@ -271,21 +260,18 @@ public class NowPlayingActivity extends AppCompatActivity implements View.OnClic
         updateSeekBar();
 
         //handle onCompletion state
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                //replay the song if repeat is enabled
-                if (isRepeat) {
-                    playSong(position);
+        mediaPlayer.setOnCompletionListener(mediaPlayer -> {
+            //replay the song if repeat is enabled
+            if (isRepeat) {
+                playSong(position);
+            } else {
+                //play a song at a random index if shuffle is enabled
+                if (isShuffle) {
+                    currentSongIndex = new Random().nextInt((musicItems.size() - 1) + 1);
+                    playSong(currentSongIndex);
                 } else {
-                    //play a song at a random index if shuffle is enabled
-                    if (isShuffle) {
-                        currentSongIndex = new Random().nextInt((musicItems.size() - 1) + 1);
-                        playSong(currentSongIndex);
-                    } else {
-                        //if no shuffle is enabled, play the next song from the list
-                        playNext();
-                    }
+                    //if no shuffle is enabled, play the next song from the list
+                    playNext();
                 }
             }
         });

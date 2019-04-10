@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -101,53 +100,50 @@ public class MainActivity extends AppCompatActivity implements ArtistsFragment.O
             fragmentManager.beginTransaction().replace(R.id.container, new SongsFragment(), SONGS_TAG).commit();
         }
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        navigationView.setNavigationItemSelectedListener(item -> {
 
-                //intent to FavoritesActivity
-                if (item.getItemId() == R.id.favorite) {
-                    Intent intent = new Intent(MainActivity.this, FavoritesActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-
-                //handle navigation drawer menu items other then Favorites
-                Fragment fragment;
-                Class fragmentClass;
-                switch (item.getItemId()) {
-                    case R.id.albums:
-                        fragmentClass = AlbumsFragment.class;
-                        break;
-                    case R.id.artists:
-                        fragmentClass = ArtistsFragment.class;
-                        break;
-                    default:
-                        fragmentClass = SongsFragment.class;
-                }
-
-                try {
-                    fragment = (Fragment) fragmentClass.newInstance();
-                    String tag = SONGS_TAG;
-                    switch (fragment.getClass().getSimpleName()) {
-                        case "AlbumsFragment":
-                            tag = ALBUMS_TAG;
-                            break;
-                        case "ArtistsFragment":
-                            tag = ARTISTS_TAG;
-                    }
-                    //display appropriate fragment based on menu item selected
-                    fragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                item.setChecked(true);
-                setTitle(item.getTitle());
-                drawerLayout.closeDrawers();
-
-                return true;
+            //intent to FavoritesActivity
+            if (item.getItemId() == R.id.favorite) {
+                Intent intent = new Intent(MainActivity.this, FavoritesActivity.class);
+                startActivity(intent);
+                finish();
             }
+
+            //handle navigation drawer menu items other then Favorites
+            Fragment fragment;
+            Class fragmentClass;
+            switch (item.getItemId()) {
+                case R.id.albums:
+                    fragmentClass = AlbumsFragment.class;
+                    break;
+                case R.id.artists:
+                    fragmentClass = ArtistsFragment.class;
+                    break;
+                default:
+                    fragmentClass = SongsFragment.class;
+            }
+
+            try {
+                fragment = (Fragment) fragmentClass.newInstance();
+                String tag = SONGS_TAG;
+                switch (fragment.getClass().getSimpleName()) {
+                    case "AlbumsFragment":
+                        tag = ALBUMS_TAG;
+                        break;
+                    case "ArtistsFragment":
+                        tag = ARTISTS_TAG;
+                }
+                //display appropriate fragment based on menu item selected
+                fragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            item.setChecked(true);
+            setTitle(item.getTitle());
+            drawerLayout.closeDrawers();
+
+            return true;
         });
     }
 
@@ -228,12 +224,7 @@ public class MainActivity extends AppCompatActivity implements ArtistsFragment.O
         doubleBackPressed = true;
         Toast.makeText(this, R.string.exit_confirm, Toast.LENGTH_SHORT).show();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                doubleBackPressed = false;
-            }
-        }, 2000);
+        new Handler().postDelayed(() -> doubleBackPressed = false, 2000);
 
     }
 }

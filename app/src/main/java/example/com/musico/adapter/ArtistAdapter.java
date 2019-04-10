@@ -42,12 +42,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistItem
         holder.songImageView.setImageResource(artistItem.getImageId());
         holder.subtitleTextView.setText(artistItem.getArtistName());
 
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onArtistSelected(artistItem.getArtistName());
-            }
-        });
+        holder.cardView.setOnClickListener(view -> listener.onArtistSelected(artistItem.getArtistName()));
     }
 
     @Override

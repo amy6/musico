@@ -47,11 +47,14 @@ public class ArtistsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView);
-        updateGridColumns(getContext().getResources().getConfiguration());
-        //get artists
-        ArrayList<MusicItem> artistItems = MusicData.getArtistImageList(getContext());
-        ArtistAdapter artistAdapter = new ArtistAdapter(getContext(), artistItems, listener);
-        recyclerView.setAdapter(artistAdapter);
+
+        if (getContext() != null) {
+            updateGridColumns(getContext().getResources().getConfiguration());
+            //get artists
+            ArrayList<MusicItem> artistItems = MusicData.getArtistImageList(getContext());
+            ArtistAdapter artistAdapter = new ArtistAdapter(getContext(), artistItems, listener);
+            recyclerView.setAdapter(artistAdapter);
+        }
     }
 
     /**

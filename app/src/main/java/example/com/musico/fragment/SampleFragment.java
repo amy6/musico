@@ -40,9 +40,8 @@ public class SampleFragment extends Fragment {
         textView.setText(R.string.no_favorites);
 
         Button button = view.findViewById(R.id.explore);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        button.setOnClickListener(view1 -> {
+            if (getArguments() != null) {
                 listener.onExplore(getArguments().getString(FRAGMENT_TAG));
             }
         });

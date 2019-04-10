@@ -65,47 +65,38 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicItemHol
         holder.subtitleTextView.setText(musicItem.getArtistName());
 
         if (holder.popup != null) {
-            holder.popup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //display dialog for each song item on click of popup menu icon
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    View customView = LayoutInflater.from(context).inflate(R.layout.layout_custom_dialog, null);
-                    ImageView imageView = customView.findViewById(R.id.album_image);
-                    imageView.setImageResource(musicItem.getImageId());
-                    TextView title = customView.findViewById(R.id.song_name);
-                    title.setText(musicItem.getSongName());
-                    TextView subTitle = customView.findViewById(R.id.artist_name);
-                    subTitle.setText(musicItem.getArtistName());
-                    builder.setView(customView)
-                            .create().show();
-                }
+            holder.popup.setOnClickListener(view -> {
+                //display dialog for each song item on click of popup menu icon
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                View customView = LayoutInflater.from(context).inflate(R.layout.layout_custom_dialog, null);
+                ImageView imageView = customView.findViewById(R.id.album_image);
+                imageView.setImageResource(musicItem.getImageId());
+                TextView title = customView.findViewById(R.id.song_name);
+                title.setText(musicItem.getSongName());
+                TextView subTitle = customView.findViewById(R.id.artist_name);
+                subTitle.setText(musicItem.getArtistName());
+                builder.setView(customView)
+                        .create().show();
             });
         }
 
         if (holder.play != null) {
-            holder.play.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //intent for play button to NowPlaying screen
-                    Intent intent = new Intent(context, NowPlayingActivity.class);
-                    intent.putExtra(ITEM_POSITION, holder.getAdapterPosition());
-                    context.startActivity(intent);
-                }
+            holder.play.setOnClickListener(view -> {
+                //intent for play button to NowPlaying screen
+                Intent intent = new Intent(context, NowPlayingActivity.class);
+                intent.putExtra(ITEM_POSITION, holder.getAdapterPosition());
+                context.startActivity(intent);
             });
         }
 
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //intent for play button to NowPlaying screen based on Albums/Artists fragment
-                Intent intent = new Intent(context, NowPlayingActivity.class);
-                intent.putExtra(ITEM_POSITION, holder.getAdapterPosition());
-                if (artistName != null && artistName.length() > 0) {
-                    intent.putExtra("ARTIST_NAME", artistName);
-                }
-                context.startActivity(intent);
+        holder.cardView.setOnClickListener(view -> {
+            //intent for play button to NowPlaying screen based on Albums/Artists fragment
+            Intent intent = new Intent(context, NowPlayingActivity.class);
+            intent.putExtra(ITEM_POSITION, holder.getAdapterPosition());
+            if (artistName != null && artistName.length() > 0) {
+                intent.putExtra("ARTIST_NAME", artistName);
             }
+            context.startActivity(intent);
         });
     }
 
