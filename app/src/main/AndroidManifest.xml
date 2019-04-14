@@ -11,6 +11,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
+        <activity android:name=".activity.LoginActivity"
+            android:label="@string/login"
+            android:theme="@style/CustomTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -23,14 +32,14 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".activity.NowPlayingActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/now_playing"
             android:theme="@style/CustomTheme" />
-        <activity android:name=".activity.FavoritesActivity"
+        <activity
+            android:name=".activity.FavoritesActivity"
             android:label="@string/favorites"
             android:theme="@style/CustomTheme" />
     </application>
